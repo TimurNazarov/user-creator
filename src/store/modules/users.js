@@ -173,7 +173,7 @@ const users = {
   },
   mutations: {
     CREATE_USER(state) {
-      const newId = state.list[state.list.length - 1].id + 1
+      const newId = state.list.length > 0 ? state.list[state.list.length - 1].id + 1 : 1
       const newUser = userBlueprint(newId)
       state.list.push(newUser)
     },

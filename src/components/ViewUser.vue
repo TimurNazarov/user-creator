@@ -17,7 +17,8 @@ const placeholderImage = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-center items-start">
+  <p v-if="!user">No users</p>
+  <div v-else class="flex justify-center items-start">
     <div class="flex flex-col items-end w-980px">
       <div class="w-full max-w-625px">
         <p class="mb-30px">profile completed on</p>
