@@ -8,30 +8,30 @@
   const store = useStore()
   const state = reactive({
     order: null,
-    activeUserId: store.state.users.list[0].id,
+    activeUserId: null,
     mode: 'view'
   })
-  const sortedList = computed(() =>  state.order ? store.state.users.list.sort((a, b) => {
+  const sortedList = computed(() =>  state.order ? store.state.users.sort((a, b) => {
     return state.order === 'asc' ? a.fields.name.value.localeCompare(b.fields.name.value) : b.fields.name.value.localeCompare(a.fields.name.value)
-  }) : store.state.users.list)
+  }) : store.state.users)
 
-  const activeUser = computed(() => store.state.users.list.find(user => user.id === state.activeUserId))
+  const activeUser = computed(() => store.state.users?.find(user => user.id === state.activeUserId) || store.state.users[0])
   function sortUsers() {
     state.order = state.order === 'asc' ? 'desc' : 'asc'
   }
 
   function createUser() {
-    store.dispatch('users/createUser')
-    state.activeUserId = store.state.users.list[store.state.users.list.length - 1].id
+    store.dispatch('createUser')
+    state.activeUserId = store.state.users[store.state.users.length - 1].id
   }
-  function editUser(user) {
-    store.dispatch('users/editUser', user)
+  async function editUser(user) {
+    await store.dispatch('editUser', user)
     state.mode = 'view'
   }
   function removeUser(id) {
     if(confirm('Do you want to remove this user?')) {
-      store.dispatch('users/removeUser', id)
-      state.activeUserId = store.state.users.list[0].id
+      store.dispatch('removeUser', id)
+      state.activeUserId = store.state.users[0]?.id
     }
   }
 </script>
@@ -47,7 +47,7 @@
         @addUser="createUser"
         @sortUsers="sortUsers"
       >
-        <UserCard :user="user" :active="state.activeUserId === user.id"/>
+        <UserCard :user="user" :active="activeUser.id === user.id"/>
       </UserList>
     </aside>
     <section class="flex-1">

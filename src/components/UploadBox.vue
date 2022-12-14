@@ -1,11 +1,15 @@
 <script  setup>
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 const props = defineProps(['picture'])
 const emit = defineEmits(['uploaded'])
 
+const state = reactive({
+  url: null
+})
 
 function handleFile(file) {
-  emit('uploaded', URL.createObjectURL(file))
+  state.url = URL.createObjectURL(file)
+  emit('uploaded', file)
 }
 const placeholderImage = computed(() => {
   return require('@/assets/icons/upload_file.svg')
@@ -24,7 +28,7 @@ const placeholderImage = computed(() => {
       ${props.picture ? 'transparent' : 'bg-white'}
       `"
       :style="{
-        'background-image': `url(${props.picture || placeholderImage})`,
+        'background-image': `url(${state.url || props.picture || placeholderImage})`,
         'background-size': props.picture ? 'contain' : '50px'
       }"
       @drop.prevent="handleFile($event.dataTransfer.items[0].getAsFile())"

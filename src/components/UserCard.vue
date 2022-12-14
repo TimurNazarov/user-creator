@@ -22,11 +22,11 @@ const placeholderImage = computed(() => {
     `">
       <div
         :class="`bg-hex-C4C4C4 rounded-full overflow-hidden w-85px h-85px cursor-pointer mr-24px
-        ${user.pictures[1].value ? '' : 'p-25px'}
+        ${user.pictures[0].value ? '' : 'p-25px'}
         `"
       >
         <img
-          :src="user.pictures[1].value || placeholderImage"
+          :src="user.pictures[0].value || placeholderImage"
         >
       </div>
       <div class="flex-1">

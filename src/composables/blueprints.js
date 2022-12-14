@@ -26,15 +26,15 @@ export function userBlueprint(id) {
       }
     },
     pictures: {
-      1: {
+      0: {
         label: 'Main picture',
         value: null
       },
-      2: {
+      1: {
         label: 'Second picture',
         value: null
       },
-      3: {
+      2: {
         label: 'Third picture',
         value: null
       }

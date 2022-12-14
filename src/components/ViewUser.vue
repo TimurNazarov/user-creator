@@ -5,9 +5,15 @@ import { measureProgress, formatDate } from '@/composables/useUtils'
 const props = defineProps(['user'])
 
 const state = reactive({
-  activePicture: 1
+  activePicture: 0
 })
 
+const pictures = computed(() => props.user.pictures.map(pic => {
+  return {
+    ...pic,
+    value: pic.value instanceof File ? URL.createObjectURL(pic.value) : pic.value
+  }
+}))
 const progress = computed(() => measureProgress({...props.user.fields, ...props.user.pictures}))
 
 const placeholderImage = computed(() => {
@@ -30,22 +36,22 @@ const placeholderImage = computed(() => {
             <div
               class="w-full h-full rounded-xl bg-cover bg-no-repeat bg-center"
               :style="{
-                'background-image': `url(${user.pictures[state.activePicture].value || placeholderImage})`,
-                'background-size': `${user.pictures[state.activePicture].value ? 'cover' : '60px'}`
+                'background-image': `url(${pictures[state.activePicture].value || placeholderImage})`,
+                'background-size': `${pictures[state.activePicture].value ? 'cover' : '60px'}`
               }"
             />
           </div>
           <div class="grid grid-cols-3 gap-x-22px">
             <div
-              :class="`bg-hex-C4C4C4 rounded-full overflow-hidden w-85px h-85px cursor-pointer
-              ${user.pictures[index].value ? '' : 'p-25px'}
-              ${index === state.activePicture ? 'border-2px border-hex-06D6A0' : ''}
-              `"
               v-for="index in 3"
-              @click="state.activePicture = index"
+              :class="`bg-hex-C4C4C4 rounded-full overflow-hidden w-85px h-85px cursor-pointer
+              ${pictures[index - 1].value ? '' : 'p-25px'}
+              ${index - 1 === state.activePicture ? 'border-2px border-hex-06D6A0' : ''}
+              `"
+              @click="state.activePicture = index - 1"
             >
               <img
-                :src="user.pictures[index].value || placeholderImage"
+                :src="pictures[index - 1].value || placeholderImage"
               >
             </div>
           </div>
